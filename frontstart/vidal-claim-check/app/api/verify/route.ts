@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
         if (image) {
           send({
             type: "thinking",
-            content: "◦◦◦ Vision module online — routing image to Groq for deep extraction...\n\n",
+            content: "◦◦◦ Vision module online — routing image for deep extraction...\n\n",
           });
           try {
             const imageContext = await extractContextFromImage(image);

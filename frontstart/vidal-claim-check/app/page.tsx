@@ -265,7 +265,7 @@ export default function ClaimRadar() {
 
                 {/* Footer note */}
                 <p className="text-center font-mono text-xs text-zinc-300 uppercase tracking-widest pt-4">
-                  LangChain · Multi-Agent Parliament · Groq Inference
+                  LangChain · Multi-Agent Parliament · Debate Inference
                 </p>
               </div>
             </div>
