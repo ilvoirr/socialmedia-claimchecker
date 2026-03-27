@@ -215,9 +215,40 @@ export default function ClaimRadar() {
                 <div className="relative">
                   <textarea
                     className="w-full h-40 sm:h-48 bg-white border-2 border-black p-6 text-base font-sans text-black focus:outline-none focus:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] resize-none placeholder-zinc-300 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                    placeholder="Enter a claim or statement to verify..."
+                    placeholder="Enter a claim... (Enter to submit · Shift+Enter for newline · Paste image directly)"
                     value={inputData}
                     onChange={(e) => setInputData(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        if (!isDisabled) executeAnalysis();
+                      }
+                    }}
+                    onPaste={(e) => {
+                      const items = Array.from(e.clipboardData.items);
+                      const imageItem = items.find((item) => item.type.startsWith("image/"));
+                      if (imageItem) {
+                        e.preventDefault();
+                        const file = imageItem.getAsFile();
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          const img = new Image();
+                          img.onload = () => {
+                            const canvas = document.createElement("canvas");
+                            const MAX = 800;
+                            let { width, height } = img;
+                            if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } }
+                            else                { if (height > MAX) { width *= MAX / height; height = MAX; } }
+                            canvas.width = width; canvas.height = height;
+                            canvas.getContext("2d")?.drawImage(img, 0, 0, width, height);
+                            setImage(canvas.toDataURL("image/jpeg", 0.7));
+                          };
+                          img.src = event.target?.result as string;
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
                   />
                   {inputData.length > 0 && (
                     <span className="absolute bottom-3 right-4 font-mono text-xs text-zinc-300 pointer-events-none">
