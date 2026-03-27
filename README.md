@@ -1,62 +1,78 @@
-# 🎯 Viral Claim Radar: Multi-Agent Fact-Checking Intelligence System
+# Viral Claim Radar: Multi-Agent Fact-Checking Intelligence System
 
 <div align="center">
 
-![Viral Claim Radar](https://img.shields.io/badge/Viral_Claim_Radar-AI_Powered_Fact_Checking-blue?style=for-the-badge&logo=artificial-intelligence)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react)
-![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python)
-
 *A sophisticated multi-agent AI system for real-time claim verification and misinformation detection*
 
-[![Demo](https://img.shields.io/badge/Live_Demo-Online-red?style=for-the-badge)](#)
-[![Documentation](https://img.shields.io/badge/Documentation-View-purple?style=for-the-badge)](#)
+[Live Demo](https://socialmedia-claimchecker.vercel.app/)
 
 </div>
 
+## System Overview
+
+Experience our multi-agent system in action:
+
+<div align="center">
+<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/initial.png" alt="Claim Input Process" width="600"/>
+</div>
+
+**Phase 1: Claim Ingestion** - Users submit viral claims through text input or screenshot upload. Our OCR Agent processes visual content, while the Intel Crawler Agent simultaneously begins gathering contextual web intelligence.
+
+<div align="center">
+<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/agentparliament.png" alt="Multi-Agent Debate" width="600"/>
+</div>
+
+**Phase 2: Agent Parliament Debate** - The claim enters our Agent Parliament where specialized AI agents engage in structured debate, including evidence presentation, counter-argument generation, source verification, and consensus building.
+
+<div align="center">
+<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/result.jpeg" alt="Final Verdict" width="600"/>
+</div>
+
+**Phase 3: Verdict Generation** - Our Verdict Agent synthesizes all agent inputs to generate stance classification, confidence scores, evidence cards, and uncertainty quantification.
+
 ---
 
-## 🌟 Overview
+## Overview
 
 **Viral Claim Radar** is an advanced multi-agent fact-checking intelligence system designed to combat misinformation across social media platforms. Leveraging cutting-edge AI technologies including OCR, semantic search, RAG (Retrieval-Augmented Generation), and multi-agent debate systems, our platform provides instant credibility assessment for viral claims with transparent evidence-based reasoning.
 
-### 🎯 Problem Statement
+### Problem Statement
 
 The rapid spread of misinformation across social platforms—Instagram, Twitter, and messaging apps like WhatsApp—has created an urgent need for fast, automated credibility assessment tools. **Viral Claim Radar** addresses this critical challenge by implementing a sophisticated multi-agent architecture that extracts claims from posts and verifies them using curated credible sources.
 
 ---
 
-## 🤖 Multi-Agent Architecture
+## Multi-Agent Architecture
 
 Our system employs a sophisticated ensemble of specialized AI agents, each contributing unique capabilities to the fact-checking pipeline:
 
-### 🧠 Core Intelligence Agents
+### Core Intelligence Agents
 
 | Agent | Function | Technology |
 |-------|----------|------------|
-| **🔍 OCR Agent** | Extracts text from screenshots and images | Tesseract + Vision Transformers |
-| **🌐 Intel Crawler Agent** | Real-time web intelligence gathering | BeautifulSoup + Scrapy |
-| **🎬 Cinema Agent** | Multimedia content analysis | LangChain + Video Processing |
-| **⚖️ Devil's Advocate Agent** | Counter-argument generation | Critical Thinking Models |
-| **🗳️ Parliament Agent** | Multi-agent debate coordination | Consensus Algorithms |
-| **⚖️ Verdict Agent** | Final judgment synthesis | Ensemble Decision Systems |
-| **🔗 Semantic Search Agent** | Context-aware information retrieval | Sentence-BERT + FAISS |
-| **📊 Evidence Ranking Agent** | Source credibility assessment | Trust Scoring Algorithms |
+| **OCR Agent** | Extracts text from screenshots and images | Tesseract + Vision Transformers |
+| **Intel Crawler Agent** | Real-time web intelligence gathering | BeautifulSoup + Scrapy |
+| **Cinema Agent** | Multimedia content analysis | LangChain + Video Processing |
+| **Devil's Advocate Agent** | Counter-argument generation | Critical Thinking Models |
+| **Parliament Agent** | Multi-agent debate coordination | Consensus Algorithms |
+| **Verdict Agent** | Final judgment synthesis | Ensemble Decision Systems |
+| **Semantic Search Agent** | Context-aware information retrieval | Sentence-BERT + FAISS |
+| **Evidence Ranking Agent** | Source credibility assessment | Trust Scoring Algorithms |
 
 ---
 
-## 🚀 System Workflow
+## System Workflow
 
-### 📥 Phase 1: Claim Ingestion
+### Phase 1: Claim Ingestion
 <div align="center">
-<img src="/public/initial.png" alt="Claim Input Process" width="600"/>
+<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/initial.png" alt="Claim Input Process" width="600"/>
 </div>
 
 Users submit viral claims through text input or screenshot upload. Our **OCR Agent** processes visual content, while the **Intel Crawler Agent** simultaneously begins gathering contextual web intelligence.
 
-### 🏛️ Phase 2: Agent Parliament Debate
+### Phase 2: Agent Parliament Debate
 <div align="center">
-<img src="/public/agentparliament.png" alt="Multi-Agent Debate" width="600"/>
+<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/agentparliament.png" alt="Multi-Agent Debate" width="600"/>
 </div>
 
 The claim enters our **Agent Parliament** where specialized AI agents engage in structured debate:
@@ -66,9 +82,9 @@ The claim enters our **Agent Parliament** where specialized AI agents engage in 
 - **Multimedia Analysis**: Cinema Agent processes video/image context
 - **Consensus Building**: Parliament Agent coordinates deliberation
 
-### 🏆 Phase 3: Verdict Generation
+### Phase 3: Verdict Generation
 <div align="center">
-<img src="/public/result.jpeg" alt="Final Verdict" width="600"/>
+<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/result.jpeg" alt="Final Verdict" width="600"/>
 </div>
 
 Our **Verdict Agent** synthesizes all agent inputs to generate:
@@ -79,7 +95,7 @@ Our **Verdict Agent** synthesizes all agent inputs to generate:
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 ### Frontend Architecture
 - **React 18.2.0** with TypeScript for type-safe development
