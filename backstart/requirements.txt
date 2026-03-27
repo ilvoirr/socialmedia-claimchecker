@@ -3,3 +3,5 @@ uvicorn
 python-dotenv
 langchain-groq
 pydantic
+langchain-community
+tavily-python

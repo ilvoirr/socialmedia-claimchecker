@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_community.tools.tavily_search import TavilySearchResults
 
 load_dotenv()
 
@@ -20,12 +21,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Single reasoning model — vision is now handled upstream by Gemini in route.ts
 llm_reasoning = ChatGroq(temperature=0.1, model_name="llama-3.3-70b-versatile")
+
+# Tavily web search — returns top 5 results with content snippets
+search_tool = TavilySearchResults(
+    max_results=5,
+    search_depth="advanced",
+    include_answer=True,
+    include_raw_content=False,
+)
 
 
 class ClaimRequest(BaseModel):
     text: str = ""
+
+
+def run_web_search(claim: str) -> str:
+    """Search the web for the claim and return formatted results."""
+    try:
+        results = search_tool.invoke(claim[:400])  # Tavily has query length limits
+        if not results:
+            return "No web search results found."
+
+        formatted = []
+        for i, r in enumerate(results, 1):
+            url     = r.get("url", "")
+            content = r.get("content", "").strip()
+            title   = r.get("title", "Source")
+            if content:
+                formatted.append(f"[{i}] {title}\n{url}\n{content}")
+
+        return "\n\n".join(formatted) if formatted else "No usable search results found."
+    except Exception as e:
+        print(f"TAVILY ERROR: {e}")
+        return f"Web search failed: {str(e)}"
 
 
 @app.post("/api/verify")
@@ -37,17 +66,30 @@ async def verify_claim(request: ClaimRequest):
             "summary": "No claim text was provided for analysis.",
         }
 
+    # --- STEP 1: Live web search for current evidence ---
+    print(f"[SEARCH] Querying Tavily for: {request.text[:100]}")
+    web_evidence = run_web_search(request.text)
+    print(f"[SEARCH] Got evidence: {web_evidence[:200]}")
+
+    # --- STEP 2: Scrutinizer prompt now grounded with real web results ---
     scrutinizer_prompt = ChatPromptTemplate.from_template(
-        """You are an elite Fact-Checking AI operating in 2026 with access to verified global knowledge up to your training cutoff.
+        """You are an elite Fact-Checking AI operating in 2026. You have just retrieved the following LIVE WEB SEARCH RESULTS for this claim:
 
-Analyze the following claim or extracted content against established real-world facts:
-
+CLAIM:
 \"\"\"{claim}\"\"\"
 
+LIVE WEB EVIDENCE (retrieved right now, treat as current):
+{web_evidence}
+
+Using the web evidence above as your PRIMARY source of truth, analyze the claim.
+- If multiple credible sources confirm the claim → SUPPORTED
+- If sources contradict the claim → REFUTED  
+- If sources are missing, ambiguous, or the claim cannot be verified → UNCERTAIN
+
 Provide a JSON response with EXACTLY these three keys:
-- "verdict": Must be exactly one of "SUPPORTED", "REFUTED", or "UNCERTAIN". "REFUTED" means the claim is demonstrably FALSE.
-- "confidence": An integer between 55 and 97. Never output 100. Reflect genuine epistemic uncertainty.
-- "summary": Exactly 2 cold, factual sentences explaining your verdict. Cite the specific reason — a known fact, data point, or logical inconsistency. No filler.
+- "verdict": Must be exactly one of "SUPPORTED", "REFUTED", or "UNCERTAIN".
+- "confidence": An integer between 55 and 97. Weight this heavily based on how many sources confirm or deny the claim. Never output 100.
+- "summary": Exactly 2 cold, factual sentences. Reference specific source findings from the web evidence above.
 
 Respond ONLY with valid JSON. No markdown, no backticks, no explanation outside the JSON."""
     )
@@ -55,11 +97,14 @@ Respond ONLY with valid JSON. No markdown, no backticks, no explanation outside 
     chain = scrutinizer_prompt | llm_reasoning
 
     try:
-        raw_result = chain.invoke({"claim": request.text}).content
+        raw_result = chain.invoke({
+            "claim": request.text,
+            "web_evidence": web_evidence,
+        }).content
+
         cleaned = raw_result.replace("```json", "").replace("```", "").strip()
         final_analysis = json.loads(cleaned)
 
-        # Clamp overconfident outputs
         confidence = int(final_analysis.get("confidence", 70))
         if confidence >= 99:
             final_analysis["confidence"] = random.randint(88, 97)
@@ -68,14 +113,12 @@ Respond ONLY with valid JSON. No markdown, no backticks, no explanation outside 
         else:
             final_analysis["confidence"] = confidence
 
-        # Ensure verdict is valid
         if final_analysis.get("verdict") not in ("SUPPORTED", "REFUTED", "UNCERTAIN"):
             final_analysis["verdict"] = "UNCERTAIN"
 
         return final_analysis
 
     except json.JSONDecodeError:
-        # Attempt to salvage verdict from raw text if JSON parse fails
         verdict = "UNCERTAIN"
         if "SUPPORTED" in raw_result.upper():
             verdict = "SUPPORTED"
