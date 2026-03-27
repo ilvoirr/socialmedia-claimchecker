@@ -118,31 +118,31 @@ Our **Verdict Agent** synthesizes all agent inputs to generate:
 
 ---
 
-## 🎯 Key Features
+## Key Features
 
-### 🧠 Intelligent Claim Processing
+### Intelligent Claim Processing
 - **Multi-modal Input**: Text, images, and screenshots
 - **Advanced OCR**: Handwriting and low-quality image handling
 - **Contextual Understanding**: Semantic analysis beyond keyword matching
 
-### 🏛️ Multi-Agent Debate System
+### Multi-Agent Debate System
 - **Adversarial Testing**: Devil's Advocate ensures robust verification
 - **Consensus Mechanisms**: Weighted voting based on agent expertise
 - **Transparent Reasoning**: Full audit trail of decision-making process
 
-### 📊 Evidence-Based Verification
+### Evidence-Based Verification
 - **Source Credibility Scoring**: Automated trust assessment
 - **Cross-Reference Validation**: Multi-source confirmation
 - **Temporal Analysis**: Claim evolution tracking
 
-### 🎨 User Experience
+### User Experience
 - **Real-time Processing**: Sub-second response times
 - **Interactive Evidence Cards**: Expandable source exploration
 - **Confidence Visualization**: Intuitive uncertainty representation
 
 ---
 
-## 🚦 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - Node.js 18+
@@ -179,7 +179,7 @@ cp backstart/.env.example backstart/.env
 
 ---
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 ### Accuracy Benchmarks
 - **Claim Extraction**: 94.2% F1-Score
@@ -195,7 +195,7 @@ cp backstart/.env.example backstart/.env
 
 ---
 
-## 🎯 Success Criteria & Evaluation
+## Success Criteria & Evaluation
 
 ### Core Metrics
 - ✅ **Claim Extraction Accuracy**: Precision and recall of claim identification
@@ -205,31 +205,31 @@ cp backstart/.env.example backstart/.env
 - ✅ **User Experience**: Interface clarity and response times
 
 ### Innovation Highlights
-- 🏛️ **Multi-Agent Debate**: Novel adversarial verification approach
-- 🧠 **Uncertainty Modeling**: Advanced confidence quantification
-- 🌐 **Real-time Processing**: Sub-second claim verification
-- 📊 **Transparent AI**: Full audit trail of decision-making
+- **Multi-Agent Debate**: Novel adversarial verification approach
+- **Uncertainty Modeling**: Advanced confidence quantification
+- **Real-time Processing**: Sub-second claim verification
+- **Transparent AI**: Full audit trail of decision-making
 
 ---
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 ### Stretch Goals (In Development)
-- 🌍 **Multilingual Support**: 50+ languages with cross-lingual verification
-- 🖥️ **Browser Extension**: Real-time social media overlay
-- 📱 **Mobile Applications**: Native iOS and Android apps
-- 🔗 **Blockchain Integration**: Immutable verification records
-- 🎯 **Personalized Trust Networks**: User-specific credibility weighting
+- **Multilingual Support**: 50+ languages with cross-lingual verification
+- **Browser Extension**: Real-time social media overlay
+- **Mobile Applications**: Native iOS and Android apps
+- **Blockchain Integration**: Immutable verification records
+- **Personalized Trust Networks**: User-specific credibility weighting
 
 ### Advanced Features
-- 🤖 **Custom Agent Training**: Domain-specific verification agents
-- 📊 **Analytics Dashboard**: Misinformation trend analysis
-- 🔌 **API Ecosystem**: Third-party integration capabilities
-- 🌐 **Decentralized Architecture**: Federated verification networks
+- **Custom Agent Training**: Domain-specific verification agents
+- **Analytics Dashboard**: Misinformation trend analysis
+- **API Ecosystem**: Third-party integration capabilities
+- **Decentralized Architecture**: Federated verification networks
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from the community! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
@@ -242,13 +242,13 @@ We welcome contributions from the community! Please see our [Contributing Guidel
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Hackathon Participants**: For their innovative contributions
 - **Research Community**: For advancing fact-checking methodologies
@@ -257,7 +257,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Contact & Support
+## Contact & Support
 
 - **Project Maintainers**: [Your Name](mailto:your.email@example.com)
 - **Bug Reports**: [GitHub Issues](https://github.com/yourusername/viral-claim-checker-v1/issues)
@@ -268,10 +268,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**🛡️ Fighting Misinformation with AI-Powered Truth 🛡️**
+**Fighting Misinformation with AI-Powered Truth**
 
 *"In an age of information overload, the truth deserves intelligent defense."*
 
-[![Back to Top](https://img.shields.io/badge/Back_to_Top-↑-blue?style=for-the-badge)](#-viral-claim-radar-multi-agent-fact-checking-intelligence-system)
+[Back to Top](#viral-claim-radar-multi-agent-fact-checking-intelligence-system)
 
 </div>
