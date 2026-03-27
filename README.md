@@ -61,40 +61,6 @@ Our system employs a sophisticated ensemble of specialized AI agents, each contr
 
 ---
 
-## System Workflow
-
-### Phase 1: Claim Ingestion
-<div align="center">
-<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/initial.png" alt="Claim Input Process" width="600"/>
-</div>
-
-Users submit viral claims through text input or screenshot upload. Our **OCR Agent** processes visual content, while the **Intel Crawler Agent** simultaneously begins gathering contextual web intelligence.
-
-### Phase 2: Agent Parliament Debate
-<div align="center">
-<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/agentparliament.png" alt="Multi-Agent Debate" width="600"/>
-</div>
-
-The claim enters our **Agent Parliament** where specialized AI agents engage in structured debate:
-- **Evidence Presentation**: Semantic search retrieves relevant information
-- **Counter-Argument Generation**: Devil's Advocate challenges assumptions
-- **Source Verification**: Web scraping validates information authenticity
-- **Multimedia Analysis**: Cinema Agent processes video/image context
-- **Consensus Building**: Parliament Agent coordinates deliberation
-
-### Phase 3: Verdict Generation
-<div align="center">
-<img src="https://github.com/ilvoirr/socialmedia-claimchecker/blob/main/frontstart/vidal-claim-check/public/result.jpeg" alt="Final Verdict" width="600"/>
-</div>
-
-Our **Verdict Agent** synthesizes all agent inputs to generate:
-- **Stance Classification**: Supported, Refuted, or Uncertain
-- **Confidence Scores**: Probabilistic certainty metrics
-- **Evidence Cards**: Transparent source attribution
-- **Uncertainty Quantification**: Reliability assessments
-
----
-
 ## Technical Stack
 
 ### Frontend Architecture
