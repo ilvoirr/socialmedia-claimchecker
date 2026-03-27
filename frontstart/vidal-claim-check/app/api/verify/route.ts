@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
 
         // --- STEP 2: Fire Python backend in parallel with the FULL claimContext ---
         // Python gets the same complete picture the debate agents will get
-        const pythonPromise = fetch("http://127.0.0.1:8000/api/verify", {
+        const pythonPromise = fetch("https://socialmedia-claimchecker.onrender.com/api/verify", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: claimContext }),
