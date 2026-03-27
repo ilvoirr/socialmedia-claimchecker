@@ -23,9 +23,8 @@ app.add_middleware(
 
 llm_reasoning = ChatGroq(temperature=0.1, model_name="llama-3.3-70b-versatile")
 
-# Tavily web search — returns top 5 results with content snippets
 search_tool = TavilySearchResults(
-    max_results=5,
+    max_results=6,
     search_depth="advanced",
     include_answer=True,
     include_raw_content=False,
@@ -36,10 +35,35 @@ class ClaimRequest(BaseModel):
     text: str = ""
 
 
-def run_web_search(claim: str) -> str:
-    """Search the web for the claim and return formatted results."""
+def extract_search_query(full_context: str) -> str:
+    """Use LLM to distill the full context blob into a clean 1-line news search query."""
     try:
-        results = search_tool.invoke(claim[:400])  # Tavily has query length limits
+        prompt = f"""Read the following content and extract the single core factual claim being made.
+Then rewrite it as a short, Google-style news search query (max 12 words).
+Output ONLY the search query string. No explanation, no quotes, no punctuation at the end.
+
+CONTENT:
+{full_context[:1500]}
+
+SEARCH QUERY:"""
+        result = llm_reasoning.invoke(prompt)
+        query = result.content.strip().strip('"').strip("'")
+        print(f"[SEARCH QUERY] Extracted: {query}")
+        return query
+    except Exception as e:
+        print(f"[QUERY EXTRACTION ERROR] {e}")
+        # Fallback: strip known prefixes and take first 120 chars
+        cleaned = full_context
+        for prefix in ["User submitted claim:", "Full image context extracted:", "---BEGIN CONTENT---"]:
+            cleaned = cleaned.replace(prefix, "")
+        return cleaned.strip()[:120]
+
+
+def run_web_search(search_query: str) -> str:
+    """Run Tavily with a clean focused query and return formatted results."""
+    try:
+        print(f"[TAVILY] Searching: {search_query}")
+        results = search_tool.invoke(search_query)
         if not results:
             return "No web search results found."
 
@@ -49,11 +73,11 @@ def run_web_search(claim: str) -> str:
             content = r.get("content", "").strip()
             title   = r.get("title", "Source")
             if content:
-                formatted.append(f"[{i}] {title}\n{url}\n{content}")
+                formatted.append(f"[{i}] {title}\nURL: {url}\n{content}")
 
         return "\n\n".join(formatted) if formatted else "No usable search results found."
     except Exception as e:
-        print(f"TAVILY ERROR: {e}")
+        print(f"[TAVILY ERROR] {e}")
         return f"Web search failed: {str(e)}"
 
 
@@ -66,32 +90,38 @@ async def verify_claim(request: ClaimRequest):
             "summary": "No claim text was provided for analysis.",
         }
 
-    # --- STEP 1: Live web search for current evidence ---
-    print(f"[SEARCH] Querying Tavily for: {request.text[:100]}")
-    web_evidence = run_web_search(request.text)
-    print(f"[SEARCH] Got evidence: {web_evidence[:200]}")
+    # --- STEP 1: Distill full context into a clean search query ---
+    search_query = extract_search_query(request.text)
 
-    # --- STEP 2: Scrutinizer prompt now grounded with real web results ---
+    # --- STEP 2: Live web search with clean query ---
+    web_evidence = run_web_search(search_query)
+    print(f"[EVIDENCE PREVIEW] {web_evidence[:300]}")
+
+    # --- STEP 3: Scrutinizer with grounded evidence ---
     scrutinizer_prompt = ChatPromptTemplate.from_template(
-        """You are an elite Fact-Checking AI operating in 2026. You have just retrieved the following LIVE WEB SEARCH RESULTS for this claim:
+        """You are an elite Fact-Checking AI operating in 2026. You have retrieved LIVE WEB SEARCH RESULTS for this claim.
 
-CLAIM:
+ORIGINAL CLAIM / CONTENT:
 \"\"\"{claim}\"\"\"
 
-LIVE WEB EVIDENCE (retrieved right now, treat as current):
+SEARCH QUERY USED: {search_query}
+
+LIVE WEB EVIDENCE:
 {web_evidence}
 
-Using the web evidence above as your PRIMARY source of truth, analyze the claim.
-- If multiple credible sources confirm the claim → SUPPORTED
-- If sources contradict the claim → REFUTED  
-- If sources are missing, ambiguous, or the claim cannot be verified → UNCERTAIN
+INSTRUCTIONS:
+- If 2+ credible sources directly confirm the claim → SUPPORTED (confidence 75-92)
+- If sources directly contradict the claim → REFUTED (confidence 75-92)  
+- If evidence is irrelevant, paywalled, or missing → UNCERTAIN (confidence 55-70)
+- Weight news sources (Times of India, NDTV, Mint, HT, BBC, Reuters) very highly
+- A tweet from a verified journalist corroborated by news coverage counts as strong evidence
 
 Provide a JSON response with EXACTLY these three keys:
-- "verdict": Must be exactly one of "SUPPORTED", "REFUTED", or "UNCERTAIN".
-- "confidence": An integer between 55 and 97. Weight this heavily based on how many sources confirm or deny the claim. Never output 100.
-- "summary": Exactly 2 cold, factual sentences. Reference specific source findings from the web evidence above.
+- "verdict": "SUPPORTED", "REFUTED", or "UNCERTAIN"
+- "confidence": integer 55–97, never 100
+- "summary": 2 factual sentences referencing what the web evidence actually said
 
-Respond ONLY with valid JSON. No markdown, no backticks, no explanation outside the JSON."""
+Respond ONLY with valid JSON. No markdown, no backticks."""
     )
 
     chain = scrutinizer_prompt | llm_reasoning
@@ -99,6 +129,7 @@ Respond ONLY with valid JSON. No markdown, no backticks, no explanation outside 
     try:
         raw_result = chain.invoke({
             "claim": request.text,
+            "search_query": search_query,
             "web_evidence": web_evidence,
         }).content
 
