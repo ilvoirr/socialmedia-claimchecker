@@ -179,9 +179,9 @@ export default function ClaimRadar() {
                 <div className="w-3 h-3 bg-[#F5F5F3]" />
               </div>
               <div>
-                <h1 className="text-xl font-black tracking-tighter uppercase leading-none">Claim Radar</h1>
+                <h1 className="text-xl font-black tracking-tighter uppercase leading-none">SOCIAL MEDIA Claim Radar</h1>
                 <p className="text-xs font-mono text-zinc-400 uppercase tracking-widest mt-0.5">
-                  Automated Fact-Check Protocol
+                   Fact-Checking Copilot Protocol
                 </p>
               </div>
             </div>
